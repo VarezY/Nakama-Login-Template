@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Nakama;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Hige.Network
         public UnityEvent onConnecting;
         public UnityEvent onConnected;
         public UnityEvent onDisconnected;
-
+        
         [Title("Network UI")]
         [SerializeField] private GameObject loadingScreen;
 
@@ -27,10 +28,9 @@ namespace Hige.Network
         public ISession Session { get; private set; }
         public IClient Client { get; private set; }
         public IApiAccount CurrentAccount { get; private set; }
-        public IMatch CurrentMatch { get; private set; }
-        public IApiMatchList MatchList{ get; private set; }
         
         public NetworkUser NetworkUser { get; private set; }
+        public LobbyManager LobbyManager { get; private set; }
 
         private void Awake()
         {
@@ -46,6 +46,7 @@ namespace Hige.Network
             }
 
             NetworkUser = GetComponent<NetworkUser>();
+            LobbyManager = GetComponent<LobbyManager>();
         }
 
         private void Start()

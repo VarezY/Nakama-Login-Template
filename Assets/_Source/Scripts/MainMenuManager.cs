@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Text;
 using Hige.Network;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 namespace Hige
 {
@@ -11,13 +13,16 @@ namespace Hige
     {
         private enum CaraLogin{Device = 1, Custom = 2}
     
-        [Title("UI")]
+        [Title("UI Login")]
         [SerializeField] private GameObject usernameInputPanel;
-        [SerializeField] private GameObject playerProfilePanel;
-        [SerializeField] private TMP_Text usernameText;
         [SerializeField] private TMP_InputField usernameInputField;
         [SerializeField] private Button firstUser;
 
+        [Title("UI Profile")]
+        [SerializeField] private GameObject playerProfilePanel;
+        [SerializeField] private TMP_Text usernameText;
+        [SerializeField] private Button quickMatchButton;
+        
         private NetworkManager _networkManager;
         private string _deviceId;
         private CaraLogin _login;
@@ -72,9 +77,13 @@ namespace Hige
                     _networkManager.AuthenticateWithDevice(_deviceId, usernameInputField.text);
                     break;
                 case CaraLogin.Custom:
-                    int byteCount = Encoding.ASCII.GetByteCount(usernameInputField.text);
-                    Debug.Log($"Number of bytes: {byteCount}");
-                    _networkManager.AuthenticateWithCustomId(usernameInputField.text);
+                    string username = usernameInputField.text;
+                    int byteCount = Encoding.ASCII.GetByteCount(username);
+                    if (byteCount < 6)
+                    {
+                        username = username.PadRight(6, ' ');
+                    }
+                    _networkManager.AuthenticateWithCustomId(username);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -89,6 +98,22 @@ namespace Hige
         public void ChangeUsername()
         {
             _networkManager.NetworkUser.UpdateUser(usernameInputField.text);
+        }
+
+        public async void QuickMatch()
+        {
+            // StartCoroutine(OnLoadGame());
+            await _networkManager.LobbyManager.StartQuickMatch();
+        }
+        
+        private IEnumerator OnLoadGame()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GamePage");
+
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
     }
 }
