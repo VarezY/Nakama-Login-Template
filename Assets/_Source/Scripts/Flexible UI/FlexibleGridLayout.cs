@@ -5,7 +5,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-namespace Flexible_UI
+namespace Hige.Flexible_UI
 {
     public class FlexibleGridLayout : LayoutGroup
     {    

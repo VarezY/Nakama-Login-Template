@@ -1,58 +1,58 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.Events;
-
-[RequireComponent(typeof(Image))]
-public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+namespace Hige.Flexible_UI
 {
-    public TabGroup tabGroup;
-    public UnityEvent onTabSelected;
-    public UnityEvent onTabDeselected;
+    [RequireComponent(typeof(Image))]
+    public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
+    {
+        public TabGroup tabGroup;
+        public UnityEvent onTabSelected;
+        public UnityEvent onTabDeselected;
     
-    [HideInInspector]
-    public Image background;
+        [HideInInspector]
+        public Image background;
 
-    void Start()
-    {
-        background = GetComponent<Image>();
-        if (tabGroup != null)
-            tabGroup.Subscribe(this);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        tabGroup.OnTabSelected(this);
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        tabGroup.OnTabEnter(this);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        tabGroup.OnTabExit(this);
-    }
-
-    public void Select()
-    {
-        if (onTabSelected != null)
+        void Start()
         {
-            onTabSelected.Invoke();
-        }
-    }
-
-    public void Deselect()
-    {
-        if (onTabDeselected != null)
-        {
-            onTabSelected.Invoke();
+            background = GetComponent<Image>();
+            if (tabGroup != null)
+                tabGroup.Subscribe(this);
         }
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            tabGroup.OnTabSelected(this);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            tabGroup.OnTabEnter(this);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            tabGroup.OnTabExit(this);
+        }
+
+        public void Select()
+        {
+            if (onTabSelected != null)
+            {
+                onTabSelected.Invoke();
+            }
+        }
+
+        public void Deselect()
+        {
+            if (onTabDeselected != null)
+            {
+                onTabSelected.Invoke();
+            }
+
+        }
+
+
     }
-
-
 }

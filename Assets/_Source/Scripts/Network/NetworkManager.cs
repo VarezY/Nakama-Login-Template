@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Nakama;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
-namespace Network
+namespace Hige.Network
 {
     public class NetworkManager : MonoBehaviour
     {

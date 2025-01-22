@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Nakama;
 using UnityEngine;
-namespace Network
+namespace Hige.Network
 {
     public class NetworkUser : MonoBehaviour
     {
