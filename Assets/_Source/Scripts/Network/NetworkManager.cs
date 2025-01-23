@@ -72,7 +72,7 @@ namespace Hige.Network
                 return;
             }
             
-            Debug.Log($"<color=cyan>Device Authenticated</color>");
+            Debug.Log($"<color=green>Authenticated with Device</color>");
             CreateSocket();
 
             if (string.IsNullOrEmpty(newUsername))
@@ -99,7 +99,7 @@ namespace Hige.Network
                 return;
             }
             
-            Debug.Log($"<color=cyan>Device Authenticated</color>");
+            Debug.Log($"<color=green>Authenticated with CustomID</color>");
             CreateSocket();
             
             NetworkUser.UpdateUser(newUsername);
@@ -119,7 +119,7 @@ namespace Hige.Network
                 return;
             }
             
-            Debug.Log($"<color=cyan>Device Authenticated</color>");
+            Debug.Log($"<color=green>Authenticated with Google</color>");
             CreateSocket();
         }
         

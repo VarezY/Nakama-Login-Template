@@ -12,6 +12,7 @@ namespace Hige.Network
 {
     public class LobbyManager : MonoBehaviour
     {
+        public int maxPlayerLobby;
         public event Action onMatchFound;
         private NetworkManager _networkManager;
         
@@ -35,8 +36,8 @@ namespace Hige.Network
             {
                 IMatchmakerTicket ticket = await _networkManager.Socket.AddMatchmakerAsync(
                     query: "*",
-                    minCount: 2,
-                    maxCount: 2);
+                    minCount: maxPlayerLobby,
+                    maxCount: maxPlayerLobby);
                 
                 Debug.Log($"<color=orange>Added to Matchmaking:</color> {ticket.Ticket}");
             }
@@ -83,12 +84,12 @@ namespace Hige.Network
         
         private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmaker)
         {
-            Debug.Log($"<color=cyan>Match Found!</color>");
+            Debug.Log($"<color=orange>Match Found!</color>");
             CurrentMatchmaker = matchmaker;
             try
             {
                 CurrentMatch = await _networkManager.Socket.JoinMatchAsync(matchmaker);
-                Debug.Log($"<color=cyan>Successfully joined match with ID</color>: {CurrentMatch.Id} {matchmaker.Users}");
+                Debug.Log($"<color=green>Successfully joined match with ID</color>: {CurrentMatch.Id} {matchmaker.Users}");
                 await LoadSceneAsync();
                 onMatchFound?.Invoke();
             }
@@ -105,8 +106,8 @@ namespace Hige.Network
             // Optional loading progress
             while (!operation.isDone)
             {
-                float progress = Mathf.Clamp01(operation.progress / 0.9f);
-                Debug.Log($"Loading progress: {progress:P0}");
+                // float progress = Mathf.Clamp01(operation.progress / 0.9f);
+                // Debug.Log($"Loading progress: {progress:P0}");
                 await Task.Yield();
             } 
         }

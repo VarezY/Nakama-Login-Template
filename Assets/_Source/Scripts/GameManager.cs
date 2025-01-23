@@ -3,6 +3,7 @@ using Hige.Network;
 using Hige.UI;
 using Nakama;
 using PimDeWitte.UnityMainThreadDispatcher;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace Hige
@@ -10,9 +11,13 @@ namespace Hige
 	public class GameManager : MonoBehaviour
 	{
 		public GameObject prefabs;
+		public GameObject localPrefab, remotePrefab;
+		
 		public Transform target;
+		public TMP_Text lobbyText;
 		
 		#region Private Parameter
+		
 		private NetworkManager _networkManager;
 		private Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
 
@@ -35,7 +40,7 @@ namespace Hige
 		{
 			foreach (IUserPresence user in _networkManager.LobbyManager.CurrentMatch.Presences)
 			{
-				Debug.Log($"{user.UserId}, {user.Username} already in Lobby");
+				Debug.Log($"{user.UserId}, {user.Username} <color=purple>already in Lobby</color>");
 				SpawnPlayerPresence(user);
 			}
 		}
@@ -45,6 +50,7 @@ namespace Hige
 			foreach (IUserPresence presence in matchPresence.Joins)
 			{
 				// Spawn a player for this presence and store it in a dictionary by session id.
+				Debug.Log($"{presence.Username} <color=purple>joining a Lobby</color>");
 				SpawnPlayerPresence(presence);
 			}
 
@@ -61,11 +67,22 @@ namespace Hige
 			}
 		}
 		
+		
 		private void SpawnPlayerPresence(IUserPresence user)
 		{
 			GameObject temp = Instantiate(prefabs, target);
 			temp.GetComponent<PlayerLobbyController>().ChangeUsername(user.Username);
 			_players.Add(user.SessionId, temp);
+			lobbyText.text = $"Number of player {_players.Count}/{_networkManager.LobbyManager.maxPlayerLobby}";
+			if (_players.Count == _networkManager.LobbyManager.maxPlayerLobby)
+			{
+				GameStart();
+			}
+		}
+		
+		private void GameStart()
+		{
+			Debug.Log($"<color=green>GAME START!</color>");
 		}
 	}
 }
