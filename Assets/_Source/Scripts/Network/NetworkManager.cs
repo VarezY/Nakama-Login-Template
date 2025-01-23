@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Nakama;
+using PimDeWitte.UnityMainThreadDispatcher;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.UI;
+using UnityEngine.SceneManagement;
 namespace Hige.Network
 {
     public class NetworkManager : MonoBehaviour
@@ -28,7 +32,9 @@ namespace Hige.Network
         public ISession Session { get; private set; }
         public IClient Client { get; private set; }
         public IApiAccount CurrentAccount { get; private set; }
-        
+        public IMatch CurrentMatch { get; private set; } 
+        public IMatchmakerMatched CurrentMatchmaker { get; private set; }
+ 
         public NetworkUser NetworkUser { get; private set; }
         public LobbyManager LobbyManager { get; private set; }
 
@@ -77,9 +83,15 @@ namespace Hige.Network
 
         public async void AuthenticateWithCustomId(string newUsername)
         {
+            int byteCount = Encoding.ASCII.GetByteCount(newUsername);
+            string paddedUsername = newUsername;
+            
+            if (byteCount < 6)
+                paddedUsername = newUsername.PadRight(6, '*'); //Padded for Nakama custom ID (min id Bytes is 6) 
+
             try
             {
-                Session = await Client.AuthenticateCustomAsync(newUsername);
+                Session = await Client.AuthenticateCustomAsync(paddedUsername);
             }
             catch (ApiResponseException ex)
             {
@@ -134,7 +146,6 @@ namespace Hige.Network
                 Debug.Log($"<color=red>Error Connecting to Session: </color> {ex.StatusCode}:{ex.Message}");
                 return;
             }
-
             GetAccount();
         }
 

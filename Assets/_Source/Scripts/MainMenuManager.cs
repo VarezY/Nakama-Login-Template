@@ -78,11 +78,6 @@ namespace Hige
                     break;
                 case CaraLogin.Custom:
                     string username = usernameInputField.text;
-                    int byteCount = Encoding.ASCII.GetByteCount(username);
-                    if (byteCount < 6)
-                    {
-                        username = username.PadRight(6, ' ');
-                    }
                     _networkManager.AuthenticateWithCustomId(username);
                     break;
                 default:

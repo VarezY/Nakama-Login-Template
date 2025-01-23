@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
+using PimDeWitte.UnityMainThreadDispatcher;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,7 +24,8 @@ namespace Hige.Network
             _networkManager = NetworkManager.Instance;
             _networkManager.onConnected.AddListener(() =>
             {
-                _networkManager.Socket.ReceivedMatchmakerMatched += OnReceivedMatchmakerMatched;
+                _networkManager.Socket.ReceivedMatchmakerMatched += matched => UnityMainThreadDispatcher.Instance().Enqueue(() => OnReceivedMatchmakerMatched(matched));
+
             });
         }
 
@@ -31,7 +33,7 @@ namespace Hige.Network
         {
             try
             {
-                var ticket = await _networkManager.Socket.AddMatchmakerAsync(
+                IMatchmakerTicket ticket = await _networkManager.Socket.AddMatchmakerAsync(
                     query: "*",
                     minCount: 2,
                     maxCount: 2);
@@ -98,7 +100,7 @@ namespace Hige.Network
         
         private async Task LoadSceneAsync()
         {
-            var operation = SceneManager.LoadSceneAsync("_Source/Scenes/GamePage");
+            AsyncOperation operation = SceneManager.LoadSceneAsync("_Source/Scenes/GamePage");
         
             // Optional loading progress
             while (!operation.isDone)
