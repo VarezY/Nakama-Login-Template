@@ -12,7 +12,7 @@ namespace Hige.Network
 {
     public class NetworkManager : MonoBehaviour
     {
-        public static NetworkManager Instance;
+        public static NetworkManager Instance { get; private set; }
         
         [Title("Server Configuration")]
         [SerializeField] private string scheme = "http";

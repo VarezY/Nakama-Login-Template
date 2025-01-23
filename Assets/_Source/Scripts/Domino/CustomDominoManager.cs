@@ -1,10 +1,15 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 namespace Hige.Domino
 {
     public class CustomDominoManager : MonoBehaviour
     {
-        public GameObject dominoPrefab;
+        [Title("Domino Configuration")]
+        public GameObject dominoTemplate;
+        public DominoScriptable dominoSkin;
+        
+        [Title("Shuffeled Dominoes")]
         public List<GameObject> dominoes = new List<GameObject>(28);
 
         private void Start()
