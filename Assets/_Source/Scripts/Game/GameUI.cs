@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 namespace Hige.Game
 {
     public class GameUI : MonoBehaviour
@@ -17,7 +18,12 @@ namespace Hige.Game
 
         private void MatchManagerOnStartGame()
         {
-            Debug.Log("Hide Lobby");
+            StartCoroutine(DelayHide());
+        }
+
+        private IEnumerator DelayHide()
+        {
+            yield return new WaitForSeconds(2);
             lobbyPanel.SetActive(false);
         }
     }

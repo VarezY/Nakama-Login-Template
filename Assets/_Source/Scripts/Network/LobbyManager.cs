@@ -12,6 +12,7 @@ namespace Hige.Network
 {
     public class LobbyManager : MonoBehaviour
     {
+        public int minPlayerLobby;
         public int maxPlayerLobby;
         public event Action onMatchFound;
         private NetworkManager _networkManager;
@@ -36,7 +37,7 @@ namespace Hige.Network
             {
                 IMatchmakerTicket ticket = await _networkManager.Socket.AddMatchmakerAsync(
                     query: "*",
-                    minCount: maxPlayerLobby,
+                    minCount: minPlayerLobby,
                     maxCount: maxPlayerLobby);
                 
                 Debug.Log($"<color=orange>Added to Matchmaking:</color> {ticket.Ticket}");
